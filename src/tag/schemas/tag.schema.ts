@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { Note } from 'src/note/schemas/note.schema';
 
 export type TagDocument = HydratedDocument<Tag>
@@ -9,7 +9,7 @@ export class Tag {
     @Prop()
     name: string
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Note' })  
+    @Prop({ type: Types.ObjectId, ref: 'Note' })  
     note: Note; 
 }
 

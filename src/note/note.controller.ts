@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Query, UseGuards } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/config/multer.config';
 import { UpdateNoteDto } from './dto/update-note.dto';
+import { NotePaginationDto } from './dto/note-pagination.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('notes')
 @ApiTags("Notes")
@@ -17,12 +19,12 @@ export class NoteController {
     }
 
     @Get()
-    findAll() {
-        return this.noteService.findAll()
+    findAll(@Query() notePaginationDto: NotePaginationDto) {
+        return this.noteService.findAll(notePaginationDto)
     }
 
-
     @Post()
+    @UseGuards(AuthGuard('jwt'))
     @ApiConsumes("multipart/form-data")
     @UseInterceptors(FileInterceptor('file', multerOptions))
     create(@Body() createNoteDto: CreateNoteDto,  @UploadedFile() file: Express.Multer.File) {
@@ -32,6 +34,7 @@ export class NoteController {
     }
 
     @Patch(":id")
+    @UseGuards(AuthGuard('jwt'))
     @ApiConsumes("multipart/form-data")
     @UseInterceptors(FileInterceptor('file', multerOptions))
     update(
@@ -45,6 +48,7 @@ export class NoteController {
     }
 
     @Delete(":id")
+    @UseGuards(AuthGuard('jwt'))
     delete(@Param("id") id: string) {
         return this.noteService.delete(id)
     }

@@ -4,6 +4,8 @@ import { Model } from 'mongoose';
 import { Tag, TagDocument } from './schemas/tag.schema';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { TagResponseDto } from './dto/tag-response.dto';
 
 @Injectable()
 export class TagService {
@@ -62,8 +64,15 @@ export class TagService {
         return this.tagModel.findOne({ name })
     }
 
-    findAll() {
-        return this.tagModel.find()
+    async findAll(paginationDto: PaginationDto) {
+        const tags = await this.tagModel
+            .find() 
+            .skip(paginationDto.offset)
+            .limit(paginationDto.pageSize)
+
+        const count = await this.tagModel.countDocuments()
+
+        return new TagResponseDto(tags, count, paginationDto)
     }
 
     async delete(id: string) {

@@ -9,3 +9,18 @@ export type CloudinaryConfig = {
     cloudName: string
     folder: string
 }
+
+export type GithubConfig = {
+    clientId: string
+    clientSecret: string
+}
+
+export type GoogleConfig = {
+    clientId: string
+    clientSecret: string
+}
+
+export type JwtConfig = {
+    expiresIn: string
+    secret: string
+}

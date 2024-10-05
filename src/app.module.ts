@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import config from './config/config';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TagModule } from './tag/tag.module';
 import { NoteModule } from './note/note.module';
 import { ImageModule } from './image/image.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     TagModule,
     NoteModule,
     ImageModule,
-    CloudinaryModule, 
+    CloudinaryModule,
+    AuthModule, 
   ],
   controllers: [],
   providers: [],
