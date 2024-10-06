@@ -10,6 +10,8 @@ import { UpdateNoteDto } from './dto/update-note.dto';
 import { NotFoundError } from 'rxjs';
 import { NotePaginationDto } from './dto/note-pagination.dto';
 import { NotesResponseDto } from './dto/note-response.dto';
+import { Tag, TagDocument } from 'src/tag/schemas/tag.schema';
+import { NoteDto } from './dto/note.dto';
 
 @Injectable()
 export class NoteService {
@@ -18,12 +20,15 @@ export class NoteService {
         private readonly imageService: ImageService,
 
         @InjectModel(Note.name)
-        private noteModel: Model<Note>
+        private noteModel: Model<NoteDocument>
     ) {}
 
     async findById(id: string) {
-        const note = await this.noteModel.findById(id).populate("image").populate("tags")
-
+        const note = await this.noteModel.findById(id)
+            .populate("image")
+            .populate("tags")
+            .populate('user')
+      
         if (!note) {
             throw new NotFoundException("Note not found")
         }
@@ -62,11 +67,13 @@ export class NoteService {
         
         const count = await this.noteModel.countDocuments(filterParams)
 
-        return new NotesResponseDto(notes, count, notePaginationDto)
+        const noteDtos = notes.map(note => new NoteDto(note))
+
+        return new NotesResponseDto(noteDtos, count, notePaginationDto)
     }
 
     async create(createNoteDto: CreateNoteDto) {
-        const {name, description, place, time, tags: tagNames, file} = createNoteDto
+        const {name, description, place, time, tags: tagNames, file, user} = createNoteDto
         const tags = await this.tagService.handleTags(tagNames)
         const note = new this.noteModel({name, description, place, time})
 
@@ -76,11 +83,12 @@ export class NoteService {
             note.image = image 
         }
 
+        note.user = user
         note.tags = tags.map(tag => tag._id)
 
         await note.save()
 
-        return note
+        return this.findById(note._id.toString())
     }
 
     async update(id: string, updateNoteDto: UpdateNoteDto) {

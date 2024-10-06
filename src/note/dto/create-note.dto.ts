@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { Transform } from "class-transformer"
 import { IsArray, IsDate, IsDateString, IsISO8601, IsOptional, IsString, MinLength } from "class-validator"
+import { UserDocument } from "src/user/schemas/user.schema"
 
 export class CreateNoteDto {
     @ApiProperty()
@@ -26,9 +27,11 @@ export class CreateNoteDto {
     @Transform(({ value }) => value.split(','))
     @IsArray()
     @IsString({ each: true})
-    tags: string[]
+    tags: string[] = []
 
     @ApiProperty({ type: 'string', format: 'binary', required: false })
     @IsOptional()
     file?: Express.Multer.File
+
+    user: UserDocument
 }

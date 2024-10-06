@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfig } from 'src/config/config.types';
 import { GoogleStrategy } from './strategy/google.strategy';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   providers: [AuthService, GithubStrategy, GoogleStrategy, JwtStrategy],
@@ -22,6 +23,7 @@ import { GoogleStrategy } from './strategy/google.strategy';
       },
       inject: [ConfigService],
     }),
+    UserModule
   ],
   controllers: [AuthController],
 })

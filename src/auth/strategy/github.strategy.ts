@@ -7,12 +7,12 @@ import { GithubConfig } from 'src/config/config.types';
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   constructor(configService: ConfigService) {
-    const {clientId, clientSecret} = configService.get<GithubConfig>('github')
+    const {clientId, clientSecret, callbackURL} = configService.get<GithubConfig>('github')
 
     super({
       clientID: clientId,
       clientSecret: clientSecret,
-      callbackURL: 'http://localhost:3000/auth/github-callback',
+      callbackURL: callbackURL,
       scope: ['profile', 'email'],
     });
   }
