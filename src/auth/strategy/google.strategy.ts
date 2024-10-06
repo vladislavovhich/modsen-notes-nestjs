@@ -8,24 +8,17 @@ import { GoogleConfig } from 'src/config/config.types';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(configService: ConfigService) {
-    const {clientId, clientSecret} = configService.get<GoogleConfig>('google')
+    const {clientId, clientSecret, callbackURL} = configService.get<GoogleConfig>('google')
 
-    console.log(clientId, clientSecret)
-    
     super({
       clientID: clientId,
       clientSecret: clientSecret,
-      callbackURL: 'http://localhost:3000/auth/google-callback',
+      callbackURL: callbackURL,
       scope: ['profile', 'email'],
     });
   }
 
-  async validate(
-    accessToken: string,
-    refreshToken: string,
-    profile: any,
-    done: any,
-  ) {
+  async validate(accessToken: string, refreshToken: string, profile: any, done: any) {
     const { name, emails, photos } = profile;
 
     const user = {

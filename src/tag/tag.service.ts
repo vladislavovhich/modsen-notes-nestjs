@@ -6,6 +6,7 @@ import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { TagResponseDto } from './dto/tag-response.dto';
+import { TagDto } from './dto/tag.dto';
 
 @Injectable()
 export class TagService {
@@ -71,8 +72,9 @@ export class TagService {
             .limit(paginationDto.pageSize)
 
         const count = await this.tagModel.countDocuments()
+        const tagDtos = tags.map(tag => new TagDto(tag))
 
-        return new TagResponseDto(tags, count, paginationDto)
+        return new TagResponseDto(tagDtos, count, paginationDto)
     }
 
     async delete(id: string) {

@@ -7,6 +7,7 @@ import { NoteModule } from './note/note.module';
 import { ImageModule } from './image/image.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { AuthModule } from './auth/auth.module';
     NoteModule,
     ImageModule,
     CloudinaryModule,
-    AuthModule, 
+    AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],

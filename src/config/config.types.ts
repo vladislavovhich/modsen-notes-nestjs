@@ -1,3 +1,11 @@
+export type Config = {
+    db: DbConfig
+    cloudinary: CloudinaryConfig
+    github: GithubConfig
+    google: GoogleConfig
+    jwt: JwtConfig
+}
+
 export type DbConfig = {
     url: string,
     name: string
@@ -13,11 +21,13 @@ export type CloudinaryConfig = {
 export type GithubConfig = {
     clientId: string
     clientSecret: string
+    callbackURL: string
 }
 
 export type GoogleConfig = {
     clientId: string
     clientSecret: string
+    callbackURL: string
 }
 
 export type JwtConfig = {
